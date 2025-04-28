@@ -1,0 +1,41 @@
+USER_PROMPT: |-
+  [TASK]
+  You'll be given a math question and a step-by-step solution written by a SLM. Your task is to output:
+  (1) <judge> judge here whether the solution is correct or incorrect </judge>
+  (2) <reason> if it's incorrect, reason here why the solution is incorrect </reason>,
+  (3) <skill> list here what skill(s) should the SLM enhance in order to answer correctly, seperated by commas </skill>.
+
+  [SKILL_LIST]
+  You should only choose the skills from this list:
+  [
+    "absolute_value_skills",
+    "algebraic_manipulation_and_equations",
+    "calculus_optimization_skills",
+    "complex_number_manipulation_and_operations",
+    "function_composition_and_transformation",
+    "graph_understanding_and_interpretation",
+    "inequality_solving_and_understanding",
+    "polynomial_skills",
+    "properties_and_application_of_exponents",
+    "quadratic_equations_and_solutions",
+    "recursive_functions_and_sequences",
+    "sequence_and_series_analysis_skills",
+    "simplification_and_basic_operations",
+    "solving_inequalities",
+    "solving_system_of_equations",
+    "summation_and_analysis_of_series",
+    "understanding_and_application_of_functions",
+    "understanding_and_applying_floor_and_ceiling_functions",
+    "understanding_and_manipulation_of_rational_functions",
+    "understanding_and_utilizing_infininte_series",
+    "understanding_ellipse_properties",
+    "understanding_logarithmic_properties_and_solving_equations"
+  ]
+
+  [QUESTION]
+  {question}
+
+  [SOLUTION]
+  {model_sol}
+
+  [REASON AND SKILL(S)]

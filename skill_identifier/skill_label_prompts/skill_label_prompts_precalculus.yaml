@@ -1,0 +1,35 @@
+USER_PROMPT: |-
+  [TASK]
+  You'll be given a math question and a step-by-step solution written by a SLM. Your task is to output:
+  (1) <judge> judge here whether the solution is correct or incorrect </judge>
+  (2) <reason> if it's incorrect, reason here why the solution is incorrect </reason>,
+  (3) <skill> list here what skill(s) should the SLM enhance in order to answer correctly, seperated by commas </skill>.
+
+  [SKILL_LIST]
+  You should only choose the skills from this list:
+  [
+    "algebra_and_equations",
+    "basic_trigonometry",
+    "calculus",
+    "complex_number_operations",
+    "complex_numbers",
+    "coordinate_systems",
+    "determinant_calculation",
+    "geometric_relations",
+    "geometry_and_space_calculation",
+    "geometry_triangle_properties",
+    "matrix_operations",
+    "parametric_equations",
+    "sequences_series_and_summation",
+    "three_dimensional_geometry",
+    "trigonometric_calculations",
+    "vector_operations"
+  ]
+
+  [QUESTION]
+  {question}
+
+  [SOLUTION]
+  {model_sol}
+
+  [REASON AND SKILL(S)]

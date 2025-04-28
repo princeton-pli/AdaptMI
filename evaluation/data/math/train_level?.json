@@ -1,0 +1,18 @@
+[
+    {
+        "problem": "One leg of a right triangle is 12 inches, and the measure of the angle opposite that leg is $30^\\circ$. What is the number of inches in the hypotenuse of the triangle?",
+        "level": "Level ?",
+        "solution": "A right triangle with a $30^\\circ$ angle is a 30-60-90 triangle.  In such a triangle, the hypotenuse has twice the length of the leg opposite the $30^\\circ$ angle, so the hypotenuse of the triangle in the problem has length $2\\cdot 12 = \\boxed{24}$ inches.",
+        "subject": "Geometry",
+        "unique_id": "test/geometry/471.json",
+        "answer": "24"
+    },
+    {
+        "problem": "We have a triangle $\\triangle ABC$ and a point $K$ on $BC$ such that $AK$ is an altitude of $\\triangle ABC$. If $AC = 10,$ $BK = 7$, and $BC = 13,$ then what is the area of $\\triangle ABC$?",
+        "level": "Level ?",
+        "solution": "First, we sketch! [asy]\npair A, B, C, K;\nA = (0, 8);\nB = (-7, 0);\nC = (6, 0);\nK = (0, 0);\ndraw(A--B--C--cycle);\ndraw(A--K);\nlabel(\"$A$\", A, N);\nlabel(\"$B$\", B, SW);\nlabel(\"$C$\", C, SE);\nlabel(\"$K$\", K, NE);\nlabel(\"10\", C--A, NE);\nlabel(\"7\", B--K, N);\nlabel(\"13\", B--C, S);\ndraw(rightanglemark(A,K,B,10));\n[/asy] We now see that $CK = BC - BK = 6.$ That means $\\triangle AKC$ is a $3:4:5$ right triangle, so $AK = 8.$ At this point, we can see that the area of $\\triangle ABC$ is $\\frac{1}{2} \\cdot AK \\cdot BC = \\frac{1}{2} \\cdot 8 \\cdot 13 = \\boxed{52}.$",
+        "subject": "Geometry",
+        "unique_id": "test/geometry/377.json",
+        "answer": "52"
+    }
+]
