@@ -10,9 +10,9 @@ def get_skill_examples(skill, data_name, subject="geometry", split="train"):
 
     if data_name == "math-skill":
         subject_path = "_".join(subject.split(" "))
-        input_dir = f"../skill_identifier/Skill_bank/MATH/{subject_path}/{split}"
+        input_dir = f"../skill_identifier/skill_bank/MATH/{subject_path}/{split}"
     elif data_name == "gsm8k-skill":
-        input_dir = f"../skill_identifier/Skill_bank/GSM8K/{split}"
+        input_dir = f"../skill_identifier/skill_bank/GSM8K/{split}"
     input_path = os.path.join(input_dir, f"{split}_post_cluster.json")
     with open(input_path, "r", encoding="utf-8") as fin:
         data = json.load(fin)

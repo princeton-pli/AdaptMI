@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument("--reward_name_or_path", type=str, default='pwork7/llama31_it_prm_2e6_bz32_1epoch_conversation')  # model path
     parser.add_argument("--dataset", type=str, default='RLHFlow/Deepseek-GSM8K-Test')  # data path
     parser.add_argument("--output_dir", type=str, default="math_best_of_n")  # output dir
-    parser.add_argument("--pred_thres", type=float, default=0.8)
+    parser.add_argument("--pred_thres1", type=float, default=0.8)
     parser.add_argument("--pred_thres2", type=float, default=0.7)
     parser.add_argument("--num_n", type=int, default=1024)  # number of N for each question
     parser.add_argument("--num_test_sample", type=int, default=8)  # number of selected test samples
@@ -37,7 +37,7 @@ def batch_data(data_list, batch_size=8):
     batch_data.append(data_list[last_start:len(data_list)])
     return batch_data
 
-def select_sample(args,sample,model,tokenizer,candidate_tokens,local_rank,pred_thres=0.8,pred_thres2=0.7):
+def select_sample(args,sample,model,tokenizer,candidate_tokens,local_rank,pred_thres1=0.8,pred_thres2=0.7):
     prompt = sample['question']
     scores_list = []
     #text_list = []
@@ -80,7 +80,7 @@ def select_sample(args,sample,model,tokenizer,candidate_tokens,local_rank,pred_t
 
     # Ours: Judge whether the sample is correct
     sample['PRM_pred'] = True
-    if best_scores[-1] <= pred_thres or np.mean(best_scores) <= pred_thres or any(x <= pred_thres2 for x in best_scores[1:]):
+    if best_scores[-1] <= pred_thres1 or np.mean(best_scores) <= pred_thres1 or any(x <= pred_thres2 for x in best_scores[1:]):
         sample['PRM_pred'] = False
 
     sample['step_scores'] = step_scores
@@ -112,7 +112,7 @@ def worker(args, model, tokenizer, data, local_rank):
     minus_tag_id = tokenizer.encode('-')[-1]
     candidate_tokens = [plus_tag_id,minus_tag_id]
     for i,sample in enumerate(tqdm(data)):
-        sign,new_sample = select_sample(args,sample,model,tokenizer,candidate_tokens,local_rank, args.pred_thres, args.pred_thres2)
+        sign,new_sample = select_sample(args,sample,model,tokenizer,candidate_tokens,local_rank, args.pred_thres1, args.pred_thres2)
         data[i] = new_sample
         temp_instances.append(sign)
 
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     data_to_send = {
         "data": [[selected_data[i]] for i in range(len(selected_data))],
         "new_data": [[new_data[i]] for i in range(len(new_data))]}
-    # with open(f"{args.output_dir}_{args.num_test_sample}_thres{args.pred_thres}_save_data_{local_rank}.jsonl",'w') as f: # We also save a copy of the step score for each local rank
+    # with open(f"{args.output_dir}_{args.num_test_sample}_thres{args.pred_thres1}_save_data_{local_rank}.jsonl",'w') as f: # We also save a copy of the step score for each local rank
     #     for entry in new_data:
     #         f.write(json.dumps(entry) + "\n")
 
@@ -225,9 +225,9 @@ if __name__ == "__main__":
         # acc = {"accuracy":sum(gathered_data)/len(gathered_data)}
         os.makedirs(args.output_dir, exist_ok=True)
 
-        with open(f"{args.output_dir}/size{args.num_test_sample}_thres1={args.pred_thres}_thres2={args.pred_thres2}.json",'w') as f:
+        with open(f"{args.output_dir}/size{args.num_test_sample}_thres1={args.pred_thres1}_thres2={args.pred_thres2}.json",'w') as f:
             json.dump(metrics,f,indent=4,ensure_ascii=False)
         
-        with open(f"{args.output_dir}/size{args.num_test_sample}_thres1={args.pred_thres}_thres2={args.pred_thres2}_save_data.jsonl",'w') as f: # We also save a copy of the step score.
+        with open(f"{args.output_dir}/size{args.num_test_sample}_thres1={args.pred_thres1}_thres2={args.pred_thres2}_save_data.jsonl",'w') as f: # We also save a copy of the step score.
             for entry in gathered_save_data:
                 f.write(json.dumps(entry) + "\n")
