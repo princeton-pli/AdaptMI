@@ -8,32 +8,32 @@ Inspired by cognitive load theory from human pedagogy, our method only introduce
 
 ![Method Overview](figures/Picture1.png)
 
-### Stage1: **Detection of *easy* and *difficult* questions**
+### Stage1: **Detection of _easy_ and _difficult_ questions**
 
-In this stage, we will label a question as *easy* or *difficult* for a Small Language Model.
+In this stage, we will label a question as _easy_ or _difficult_ for a Small Language Model.
 
 `math-rm/rm_classify.py` employs a process reward model to assign scores for each step in the SLM response. We then use thresholds τ1, τ2 (`pred_thres1` and `pred_thres2` in the code) to classify whether a question q is easy or difficult.
 
 ### **Stage 2: Skill-based selection of in-context examples**
 
-- AdaptMI uses skill-based *k*-shot examples for *difficult* questions and fixed *k*-shot examples for *easy* questions.
+- AdaptMI uses skill-based _k_-shot examples for _difficult_ questions and fixed _k_-shot examples for _easy_ questions.
 - AdaptMI+ focuses only on the skills that the model’s initial response lacks.
 
 ## Environmental Setup
 
-```json
+```bash
 conda create -n matheval python=3.10
 conda activate matheval
 
 cd evaluation/latex2sympy
 pip install -e .
 cd ..
-pip install -r requirements.txt 
+pip install -r requirements.txt
 pip install vllm==0.5.1 --no-build-isolation
 pip install transformers==4.42.3
 ```
 
-```json
+```bash
 conda create -n stage1 python=3.10.9
 conda activate stage1
 
@@ -55,7 +55,7 @@ pip install deepspeed
 pip install -r math-rm/requirements.txt
 ```
 
-```json
+```bash
 conda create -n stage2+ python=3.10
 conda activate stage2+
 pip install skill_identifier/requirements.txt
@@ -63,19 +63,19 @@ pip install skill_identifier/requirements.txt
 
 ## AdaptMI
 
-```json
+```bash
 sh scripts/adaptmi.sh
 ```
 
 ## AdaptMI+
 
-```json
+```bash
 sh scripts/adaptmi+.sh
 ```
 
 # Citation
 
-```json
+```BibTeX
 @article{he2025adaptmi,
   title={AdaptMI: Adaptive Skill-based In-context Math Instruction for Small Language Models},
   author={He, Yinghui and Panigrahi, Abhishek and Lin, Yong and Arora, Sanjeev},
