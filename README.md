@@ -61,17 +61,23 @@ conda activate stage2+
 pip install skill_identifier/requirements.txt
 ```
 
-## AdaptMI
+## Evaluation
+
+### AdaptMI
 
 ```bash
 sh scripts/adaptmi.sh
 ```
 
-## AdaptMI+
+### AdaptMI+
 
 ```bash
 sh scripts/adaptmi+.sh
 ```
+
+### Baseline
+
+[We’re working on this section… Stay tuned!]
 
 # Citation
 
