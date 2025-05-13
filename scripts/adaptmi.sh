@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Stage 1-1 inference parameters
+MODEL_PATH="../models/Qwen2.5-3B-Instruct"
+MODEL_NAME=$(basename "$MODEL_PATH")
+NUM_TEST_SAMPLE="1"
+
+SPLIT="test"
+
+DATASET="math"
+INFERENCE_OUTPUT_DIR="../outputs/adaptmi/$DATASET/$MODEL_NAME/stage1_inference"
+
+# Stage 1-2 classification parameters
+REWARD_MODEL="RLHFlow/Llama3.1-8B-PRM-Deepseek-Data"
+
+CLASSIFICATION_OUTPUT_DIR="../outputs/adaptmi/$DATASET/$MODEL_NAME/stage1_classified"
+PRED_THRES1="0.9"
+PRED_THRES2="0.7"
+
+# Stage 2 parameters
+STAGE2_OUTPUT_DIR="../outputs/adaptmi/$DATASET/$MODEL_NAME/stage2_inference"
+
+
+echo "Stage1-1: Running evaluation on $MODEL_NAME on $DATASET"
+conda activate matheval
+cd evaluation
+
+TOKENIZERS_PARALLELISM=false \
+python3 -u math_eval.py \
+    --model_name_or_path ${MODEL_PATH} \
+    --data_name ${DATASET} \
+    --output_dir ${INFERENCE_OUTPUT_DIR} \
+    --split ${SPLIT} \
+    --prompt_type "qwen25-math-cot" \
+    --num_test_sample ${NUM_TEST_SAMPLE} \
+    --num_shots 5 \
+    --seed 0 \
+    --temperature 0.7 \
+    --n_sampling 1 \
+    --top_p 1 \
+    --use_vllm \
+    --start 0 \
+    --end -1 \
+    --save_outputs \
+    --overwrite
+
+
+echo "Stage1-2: Running classification on $MODEL_NAME on $DATASET"
+conda activate stage1
+cd ../math-rm
+
+accelerate launch rm_classify.py \
+    --reward_name_or_path ${REWARD_MODEL} \
+    --dataset ${INFERENCE_OUTPUT_DIR}/${SPLIT}_${NUM_TEST_SAMPLE}_0+5shots.jsonl \
+    --output_dir ${CLASSIFICATION_OUTPUT_DIR} \
+    --num_test_sample ${NUM_TEST_SAMPLE} \
+    --pred_thres1 ${PRED_THRES1} \
+    --pred_thres2 ${PRED_THRES2} \
+
+
+echo "Stage2: Running skill-based evaluation on $MODEL_NAME on $DATASET"
+conda activate matheval
+cd ../evaluation
+
+TOKENIZERS_PARALLELISM=false \
+python3 -u math_eval.py \
+    --model_name_or_path ${MODEL_PATH} \
+    --data_path ../${CLASSIFICATION_OUTPUT_DIR}/size${NUM_TEST_SAMPLE}_thres1=${PRED_THRES1}_thres2=${PRED_THRES2}_save_data.jsonl \
+    --data_name ${DATASET}-skill \
+    --output_dir ${STAGE2_OUTPUT_DIR} \
+    --split ${SPLIT} \
+    --prompt_type "qwen25-math-cot" \
+    --num_test_sample -1 \
+    --num_shots 5 \
+    --num_skill_shots 5 \
+    --seed 0 \
+    --temperature 0.7 \
+    --n_sampling 1 \
+    --top_p 1 \
+    --use_vllm \
+    --start 0 \
+    --end -1 \
+    --save_outputs \
+    --overwrite \
+    --PRM_judge

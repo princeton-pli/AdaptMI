@@ -171,7 +171,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 wandb/
-*.sh
+# *.sh
 alignment-handbook/
 gemma_9b_700K/
 gemma_9b_700K_v2/

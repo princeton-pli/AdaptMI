@@ -1,1 +1,0 @@
-pipeline_outputs/maj_voting/math/Qwen2.5-1.5B-Instruct/test_qwen25-math-cot_-1_0+5shots.jsonl filter=lfs diff=lfs merge=lfs -text
